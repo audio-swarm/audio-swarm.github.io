@@ -63,6 +63,19 @@
             gap: 1rem;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            height: 36px;
+            width: auto;
+            display: block;
+        }
+
         .logo {
             font-size: 1.4rem;
             font-weight: 800;
@@ -420,7 +433,10 @@
 <body>
 
     <header>
-        <div class="logo">Audio-SWARM</div>
+        <a href="#" class="brand">
+            <img src="logo.png" alt="Audio-SWARM icon" class="nav-logo">
+            <span class="logo">Audio-SWARM</span>
+        </a>
         <nav>
             <a href="#features">Features</a>
             <a href="#gallery">Examples</a>
