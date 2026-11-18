@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio-SWARM | Free Audio Waveform Generator & Bulk Album Artwork Tool</title>
+    <link rel="icon" type="image/png" href="logo.png">
     <meta name="description" content="Audio-SWARM is a free, open-source desktop application for creating high-resolution horizontal, vertical, and circular audio waveform artwork and batch embedding album covers into MP3, FLAC, WAV, and M4A files.">
     <meta name="keywords" content="audio waveform generator, circular waveform maker, sound wave art, bulk album artwork embedder, MP3 cover art batch tool, open source audio visualizer, Audio-SWARM">
     <meta name="author" content="Patrice Laborda">
@@ -349,6 +350,71 @@
             color: var(--text-muted);
         }
 
+        /* Hero Logo */
+        .hero-logo {
+            max-width: 380px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 1.5rem;
+            display: block;
+            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+        }
+
+        /* Click-to-Zoom Lightbox */
+        .gallery-item img,
+        .screenshot-wrapper img {
+            cursor: zoom-in;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: rgba(15, 17, 20, 0.92);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 92vw;
+            max-height: 88vh;
+            text-align: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-color);
+        }
+
+        .lightbox-caption {
+            color: var(--text-main);
+            margin-top: 0.85rem;
+            font-size: 1rem;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.75rem;
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+
     </style>
 </head>
 <body>
@@ -367,6 +433,7 @@
     <main>
         <!-- Hero & Download -->
         <section class="hero">
+            <img src="logo.png" alt="Audio-SWARM Logo" class="hero-logo">
             <span class="badge">Open Source • Linux, Windows & macOS • AGPL-3.0</span>
             <h1>Turn Your Music Into High-Resolution Waveform Artwork</h1>
             <p>
@@ -555,5 +622,36 @@
         </p>
     </footer>
 
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" title="Close">&times;</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="">
+            <p id="lightbox-caption" class="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        document.querySelectorAll('.gallery-item img, .screenshot-wrapper img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightboxCaption.textContent = img.alt;
+                lightbox.classList.add('active');
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
 </body>
 </html>
