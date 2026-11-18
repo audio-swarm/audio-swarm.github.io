@@ -306,6 +306,49 @@
             font-size: 0.9rem;
             margin-top: 3rem;
         }
+         /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-orange);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            background-color: #141518;
+        }
+
+        .gallery-info {
+            padding: 1.15rem;
+        }
+
+        .gallery-info h3 {
+            font-size: 1.05rem;
+            color: var(--accent-yellow);
+            margin-bottom: 0.35rem;
+        }
+
+        .gallery-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
     </style>
 </head>
 <body>
@@ -314,6 +357,7 @@
         <div class="logo">Audio-SWARM</div>
         <nav>
             <a href="#features">Features</a>
+            <a href="#gallery">Examples</a>
             <a href="#formats">Supported Formats</a>
             <a href="#install">Quick Install</a>
             <a href="https://github.com/PatLabGit/Audio-SWARM/releases" target="_blank" class="btn-nav">Download on GitHub</a>
@@ -387,6 +431,56 @@
                 </article>
             </div>
         </section>
+                <section id="gallery">
+            <h2>Waveform Artwork Examples</h2>
+            <p class="section-subtitle">
+                Generated directly with Audio-SWARM using custom color gradients, peak shapes, and high-resolution export settings.
+            </p>
+
+            <div class="gallery-grid">
+                <figure class="gallery-item">
+                    <img src="example-horizontal.png" alt="Horizontal gradient audio waveform generated with Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Horizontal Gradient Wave</h3>
+                        <p>High-resolution stereo peak rendering with smooth multi-color gradient fills.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-vertical.png" alt="Vertical flow audio visualization created with Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Vertical Flow Slices</h3>
+                        <p>Distinctive vertical peak slices ideal for modern album covers and posters.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-circular.png" alt="Circular radial spectrum waveform generated with Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Circular & Radial Spectrum</h3>
+                        <p>Geometric circular wave exported with a transparent background for vinyl or video overlays.</p>
+                    </figcaption>
+                </figure>
+                
+                <figure class="gallery-item">
+                    <img src="example-circular-both-way.png" alt="Circular radial inward and outward waveform generated with Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Circular Waveform Inward-Outward</h3>
+                        <p>Geometric circular waveform with inward and outward draw option for Album overlays.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-album.jpg" alt="Minimal Circular waveform generated with Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Minimal Circular Waveform Inward-Outward</h3>
+                        <p>Geometric minimal circular waveform embedded in a sond and played with Celluloid showing Album cover.</p>
+                    </figcaption>
+               </figure>
+                
+            </div>
+        </section>
+
         <section id="formats">
             <h2>Supported Audio, Video & Image Formats</h2>
             <p class="section-subtitle">
