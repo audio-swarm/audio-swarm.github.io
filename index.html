@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio-SWARM | Free Audio Waveform Generator & Bulk Album Artwork Tool</title>
+    <meta name="description" content="Audio-SWARM is a free, open-source desktop application for creating high-resolution horizontal, vertical, and circular audio waveform artwork and batch embedding album covers into MP3, FLAC, WAV, and M4A files.">
+    <meta name="keywords" content="audio waveform generator, circular waveform maker, sound wave art, bulk album artwork embedder, MP3 cover art batch tool, open source audio visualizer, Audio-SWARM">
+    <meta name="author" content="Patrice Laborda">
+
+    <!-- Open Graph / Social Media Preview -->
+    <meta property="og:title" content="Audio-SWARM — Audio Waveform Art & Bulk Album Cover Generator">
+    <meta property="og:description" content="Turn music tracks into high-resolution horizontal, vertical, and circular waveform artwork up to 12,000px and batch-embed covers into your audio library.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://audio-swarm.github.io">
+    <meta property="og:image" content="https://audio-swarm.github.io/app-screenshot.jpg">
+
+    <style>
+        :root {
+            --bg-dark: #1e2024;
+            --bg-panel: #282b30;
+            --bg-card: #31353b;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-orange: #f97316;
+            --accent-yellow: #eab308;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --border-color: #3f444c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-orange);
+            text-decoration: none;
+        }
+
+        /* Navigation */
+        header {
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent-orange);
+        }
+
+        .btn-nav {
+            background-color: var(--accent-green);
+            color: #fff !important;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .btn-nav:hover {
+            opacity: 0.9;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 4rem 5% 3rem;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(249, 115, 22, 0.15);
+            color: var(--accent-orange);
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0 auto 2rem;
+            font-size: 1.15rem;
+            color: var(--text-muted);
+        }
+
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-orange), #ea580c);
+            color: #fff;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #3c4149;
+        }
+
+        .screenshot-wrapper {
+            background-color: var(--bg-panel);
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        .screenshot-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .caption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Sections */
+        section {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 3.5rem 5%;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Feature Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.75rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-yellow);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            margin-bottom: 1rem;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            color: var(--text-main);
+            font-size: 0.92rem;
+        }
+
+        .card li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Formats & Specs */
+        .specs-box {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .spec-item h4 {
+            color: var(--accent-orange);
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .spec-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Install Steps */
+        .install-card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        code {
+            background-color: #141518;
+            color: #38bdf8;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background-color: #141518;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 0.75rem 0 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        footer {
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2.5rem 5%;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Audio-SWARM</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#formats">Supported Formats</a>
+            <a href="#install">Quick Install</a>
+            <a href="https://github.com/PatLabGit/Audio-SWARM/releases" target="_blank" class="btn-nav">Download on GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero & Download -->
+        <section class="hero">
+            <span class="badge">Open Source • Linux, Windows & macOS • AGPL-3.0</span>
+            <h1>Turn Your Music Into High-Resolution Waveform Artwork</h1>
+            <p>
+                <strong>Audio-SWARM</strong> is a free desktop application for generating custom horizontal, vertical, and circular sound wave art—and batch embedding album covers directly into your audio files.
+            </p>
+            <div class="cta-group">
+                <a href="https://github.com/PatLabGit/Audio-SWARM/releases/download/Alpha-6-sound-waveform-birth/Audio-SWARM-Alpha-6.zip" class="btn-primary">⬇ Download Audio-SWARM (ZIP)</a>
+                <a href="https://github.com/PatLabGit/Audio-SWARM" target="_blank" class="btn-secondary">View Source Code on GitHub</a>
+            </div>
+
+            <div class="screenshot-wrapper">
+                <img src="app-screenshot.png" alt="Audio-SWARM Dark Theme Interface showing Circular Waveform Generator with live preview">
+                <p class="caption">Audio-SWARM Circular Waveform workspace featuring real-time preview, customizable inner radius, and batch folder processing.</p>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>Everything You Need for Audio Visualization & Cover Art</h2>
+            <p class="section-subtitle">
+                Whether you are designing cover art for a single release or organizing thousands of tracks, Audio-SWARM automates the entire workflow.
+            </p>
+
+            <div class="grid-2">
+                <article class="card">
+                    <h3>1. Sound Waveform Maker</h3>
+                    <p>Transform audio tracks into crisp horizontal or vertical waveform graphics with full control over colors, gradients, stem spacing, and peak shapes.</p>
+                    <ul>
+                        <li><strong>Ultra-High Resolution:</strong> Export images up to 12,000 pixels wide for 4K displays and large-format printing.</li>
+                        <li><strong>Unique Vertical Flow:</strong> Render audio peaks as flowing vertical slices for modern visual designs.</li>
+                        <li><strong>Recursive Batch Mode:</strong> Process entire folders and subfolders while preserving your directory tree.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>2. Circular Waveform Generator</h3>
+                    <p>Create geometric circular audio visualizations with transparent backgrounds ready to drop onto posters, vinyl labels, or video overlays.</p>
+                    <ul>
+                        <li><strong>Three Distinct Modes:</strong> Circular Waveform, Radial Spectrum, and Minimal Circular Waveform.</li>
+                        <li><strong>Directional Control:</strong> Expand peaks outward, inward, or both with adjustable inner radius and rotation.</li>
+                        <li><strong>Live Preview:</strong> Fine-tune amplitude, sensitivity, and line thickness before batch exporting.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>3. Bulk Artwork Linker</h3>
+                    <p>Stop editing music metadata one track at a time. Place your audio files and cover images in one folder and embed artwork across your entire library in seconds.</p>
+                    <ul>
+                        <li><strong>Automatic Pairing:</strong> Matches images to audio files sequentially by filename order.</li>
+                        <li><strong>Smart Conversion:</strong> Automatically resizes images and fills transparent backgrounds with your chosen color.</li>
+                        <li><strong>Original Filenames Preserved:</strong> Updates embedded tags cleanly without renaming your files.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>4. Video Poster & Multilingual UI</h3>
+                    <p>Built for international creators with offline documentation and experimental batch poster embedding for video collections.</p>
+                    <ul>
+                        <li><strong>Video Poster Mode:</strong> Pair poster images with MP4, M4V, and MKV files in bulk.</li>
+                        <li><strong>12 Interface Languages:</strong> Includes English, French, German, Spanish, Portuguese, Italian, Dutch, Ukrainian, Japanese, Korean, and Chinese.</li>
+                        <li><strong>Drag & Drop Workflow:</strong> Drop individual files or whole folders straight into the workspace.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+        <section id="formats">
+            <h2>Supported Audio, Video & Image Formats</h2>
+            <p class="section-subtitle">
+                Audio-SWARM uses FFmpeg and Mutagen under the hood to decode lossless and compressed audio formats accurately.
+            </p>
+
+            <div class="specs-box">
+                <div class="spec-item">
+                    <h4>Supported Audio Formats</h4>
+                    <p>MP3, FLAC, WAV, AIFF / AIF, M4A / AAC, OGG / OGA, and OPUS.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Image & Export Formats</h4>
+                    <p>Supports PNG (with full alpha transparency) and JPG / JPEG artwork files.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Video Containers (Beta)</h4>
+                    <p>Batch poster attachment supported for MP4, M4V, and MKV files.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Flexible Output Options</h4>
+                    <p>Embed waveform art inside the audio file, save alongside it, or export standalone images.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="install">
+            <h2>Quick Installation Guide</h2>
+            <p class="section-subtitle">
+                Audio-SWARM runs on Python 3.12+ and requires FFmpeg installed on your system.
+            </p>
+
+            <div class="install-card">
+                <h3>1. Install Required Python Libraries</h3>
+                <p>After installing Python 3.12+ and FFmpeg, install the four required dependencies via terminal or command prompt:</p>
+                <pre><code>pip install numpy matplotlib pillow mutagen</code></pre>
+
+                <h3>2. Download & Launch</h3>
+                <p>Download and extract the <a href="https://github.com/PatLabGit/Audio-SWARM/releases/download/Alpha-6-sound-waveform-birth/Audio-SWARM-Alpha-6.zip">Audio-SWARM ZIP archive</a>, then launch using your operating system's shortcut or run:</p>
+                <pre><code>python3 main.py</code></pre>
+                <p>Need platform-specific instructions for Ubuntu/Linux Mint, Windows 10/11, or macOS? Read the complete <a href="https://github.com/PatLabGit/Audio-SWARM" target="_blank">Installation & Setup Guide on GitHub</a>.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Audio-SWARM</strong> — Created by Patrice Laborda • Licensed under GNU AGPLv3</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/PatLabGit/Audio-SWARM" target="_blank">GitHub Repository</a> •
+            <a href="https://github.com/PatLabGit/Audio-SWARM/issues" target="_blank">Report a Bug</a>
+        </p>
+    </footer>
+
+</body>
+</html>
