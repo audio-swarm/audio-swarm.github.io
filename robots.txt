@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://audio-swarm.github.io/sitemap.xml
