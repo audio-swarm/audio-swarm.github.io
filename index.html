@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio-SWARM | Free Audio Waveform Generator & Bulk Album Artwork Tool</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="alternate" hreflang="en" href="https://audio-swarm.github.io">
+    <link rel="alternate" hreflang="fr" href="https://audio-swarm.github.io/fr.html">
     <meta name="description" content="Audio-SWARM is a free, open-source desktop application for creating high-resolution horizontal, vertical, and circular audio waveform artwork and batch embedding album covers into MP3, FLAC, WAV, and M4A files.">
     <meta name="keywords" content="audio waveform generator, circular waveform maker, sound wave art, bulk album artwork embedder, MP3 cover art batch tool, open source audio visualizer, Audio-SWARM">
     <meta name="author" content="Patrice Laborda">
@@ -451,6 +453,30 @@
             }
         }
 
+        /* Language Switcher */
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .lang-switch span.active {
+            color: var(--accent-orange);
+        }
+
+        .lang-switch a {
+            color: var(--text-muted);
+        }
+
+        .lang-switch a:hover {
+            color: var(--text-main);
+        }
 
     </style>
 </head>
@@ -468,6 +494,11 @@
             <a href="#formats">Supported Formats</a>
             <a href="#install">Quick Install</a>
             <a href="https://github.com/PatLabGit/Audio-SWARM/releases" target="_blank" class="btn-nav">Download on GitHub</a>
+            <div class="lang-switch" aria-label="Language switcher">
+                <span class="active">EN</span>
+                <span style="color: var(--border-color);">|</span>
+                <a href="fr.html" title="Version française">FR</a>
+            </div>
         </nav>
     </header>
 
