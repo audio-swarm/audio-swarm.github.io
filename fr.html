@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio-SWARM | Générateur gratuit de formes d'onde audio et pochettes d'album en lot</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="alternate" hreflang="en" href="https://audio-swarm.github.io">
+    <link rel="alternate" hreflang="fr" href="https://audio-swarm.github.io/fr.html">
+    <meta name="description" content="Audio-SWARM est une application de bureau gratuite et open source permettant de créer des œuvres graphiques de formes d'onde audio haute résolution (horizontales, verticales et circulaires) et d'intégrer par lot des pochettes d'album dans vos fichiers MP3, FLAC, WAV et M4A.">
+    <meta name="keywords" content="générateur forme d'onde audio, onde sonore circulaire, art audio, pochette album par lot, visualiseur audio open source, Audio-SWARM">
+    <meta name="author" content="Patrice Laborda">
+
+    <!-- Open Graph / Aperçu réseaux sociaux -->
+    <meta property="og:title" content="Audio-SWARM — Générateur de formes d'onde audio & pochettes par lot">
+    <meta property="og:description" content="Transformez vos morceaux de musique en formes d'onde graphiques haute résolution jusqu'à 12 000 px et intégrez vos pochettes par lot dans votre bibliothèque audio.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.iofr.html">
+    <meta property="og:image" content="https://github.ioapp-screenshot.png">
+
+    <style>
+        :root {
+            --bg-dark: #1e2024;
+            --bg-panel: #282b30;
+            --bg-card: #31353b;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-orange: #f97316;
+            --accent-yellow: #eab308;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --border-color: #3f444c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-orange);
+            text-decoration: none;
+        }
+
+        /* Navigation */
+        header {
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            height: 36px;
+            width: auto;
+            display: block;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.35rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent-orange);
+        }
+
+        .btn-nav {
+            background-color: var(--accent-green);
+            color: #fff !important;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .btn-nav:hover {
+            opacity: 0.9;
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .lang-switch span.active {
+            color: var(--accent-orange);
+        }
+
+        .lang-switch a {
+            color: var(--text-muted);
+        }
+
+        .lang-switch a:hover {
+            color: var(--text-main);
+        }
+
+        /* Mobile Header Fix */
+        @media (max-width: 920px) {
+            header {
+                justify-content: center;
+                padding: 0.85rem 4%;
+                gap: 0.75rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.65rem 0.95rem;
+                width: 100%;
+            }
+
+            nav a {
+                font-size: 0.88rem;
+            }
+
+            .btn-nav {
+                padding: 0.45rem 0.9rem;
+                font-size: 0.88rem;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 4rem 5% 3rem;
+            text-align: center;
+        }
+
+        .hero-logo {
+            max-width: 380px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 1.5rem;
+            display: block;
+            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(249, 115, 22, 0.15);
+            color: var(--accent-orange);
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0 auto 2rem;
+            font-size: 1.15rem;
+            color: var(--text-muted);
+        }
+
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-orange), #ea580c);
+            color: #fff;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #3c4149;
+        }
+
+        .screenshot-wrapper {
+            background-color: var(--bg-panel);
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        .screenshot-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            cursor: zoom-in;
+        }
+
+        .caption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Sections */
+        section {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 3.5rem 5%;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 720px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-orange);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            background-color: #141518;
+            cursor: zoom-in;
+        }
+
+        .gallery-info {
+            padding: 1.15rem;
+        }
+
+        .gallery-info h3 {
+            font-size: 1.05rem;
+            color: var(--accent-yellow);
+            margin-bottom: 0.35rem;
+        }
+
+        .gallery-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Feature Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.75rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-yellow);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            margin-bottom: 1rem;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            color: var(--text-main);
+            font-size: 0.92rem;
+        }
+
+        .card li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Formats & Specs */
+        .specs-box {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .spec-item h4 {
+            color: var(--accent-orange);
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .spec-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Install Steps */
+        .install-card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        code {
+            background-color: #141518;
+            color: #38bdf8;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background-color: #141518;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 0.75rem 0 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: rgba(15, 17, 20, 0.92);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 92vw;
+            max-height: 88vh;
+            text-align: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-color);
+        }
+
+        .lightbox-caption {
+            color: var(--text-main);
+            margin-top: 0.85rem;
+            font-size: 1rem;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.75rem;
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        footer {
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2.5rem 5%;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="brand">
+            <img src="logo.png" alt="Icône Audio-SWARM" class="nav-logo">
+            <span class="logo">Audio-SWARM</span>
+        </a>
+        <nav>
+            <a href="#gallery">Exemples</a>
+            <a href="#features">Fonctionnalités</a>
+            <a href="#prints">Impressions</a>
+            <a href="#formats">Formats</a>
+            <a href="#install">Installation</a>
+            <a href="https://github.com" target="_blank" class="btn-nav">GitHub</a>
+            <div class="lang-switch" aria-label="Sélecteur de langue">
+                <a href="index.html" title="English version">EN</a>
+                <span style="color: var(--border-color);">|</span>
+                <span class="active">FR</span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <img src="logo.png" alt="Logo Audio-SWARM" class="hero-logo">
+            <span class="badge">Open Source • Linux, Windows &amp; macOS • AGPL-3.0</span>
+            <h1>Transformez votre musique en œuvres graphiques haute résolution</h1>
+            <p>
+                <strong>Audio-SWARM</strong> est une application de bureau gratuite permettant de générer des formes d'onde sonores personnalisées (horizontales, verticales et circulaires) et d'intégrer par lot vos pochettes d'album directement dans vos fichiers audio.
+            </p>
+            <div class="cta-group">
+                <a href="https://github.com/archive/refs/heads/main.zip" class="btn-primary">⬇ Télécharger Audio-SWARM (ZIP)</a>
+                <a href="https://github.com" target="_blank" class="btn-secondary">Voir le code source sur GitHub</a>
+            </div>
+
+            <div class="screenshot-wrapper">
+                <img src="app-screenshot.png" alt="Interface thème sombre d'Audio-SWARM montrant le générateur de forme d'onde circulaire avec aperçu en direct">
+                <p class="caption">Espace de travail Forme d'onde circulaire d'Audio-SWARM avec aperçu en temps réel, rayon interne réglable et traitement de dossiers par lot.</p>
+            </div>
+        </section>
+
+        <section id="gallery">
+            <h2>Exemples de formes d'onde graphiques</h2>
+            <p class="section-subtitle">
+                Générés directement avec Audio-SWARM grâce à des dégradés de couleurs personnalisés, différentes formes de crêtes et un export haute résolution.
+            </p>
+
+            <div class="gallery-grid">
+                <figure class="gallery-item">
+                    <img src="example-waveform-peak.png" alt="Forme d'onde audio horizontale avec crêtes en sucette générée avec Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Onde dégradée à crêtes rondes</h3>
+                        <p>Rendu stéréo haute résolution avec crêtes arrondies et tiges fines.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-horizontal.png" alt="Forme d'onde audio horizontale dégradée générée avec Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Onde horizontale dégradée</h3>
+                        <p>Rendu stéréo haute résolution avec remplissage en dégradés multicolores fluides.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-vertical.png" alt="Visualisation audio en flux vertical créée avec Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Tranches en flux vertical</h3>
+                        <p>Tranches verticales originales idéales pour les pochettes d'album modernes et les affiches.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-circular.png" alt="Forme d'onde circulaire et spectre radial générés avec Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Onde circulaire &amp; spectre radial</h3>
+                        <p>Onde circulaire géométrique exportée sur fond transparent pour vinyles ou incrustations vidéo.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-circular-both-way.png" alt="Forme d'onde circulaire bidirectionnelle générée avec Audio-SWARM">
+                    <figcaption class="gallery-info">
+                        <h3>Onde circulaire bidirectionnelle</h3>
+                        <p>Forme d'onde circulaire avec tracé vers l'intérieur et l'extérieur pour habillages d'albums.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-album.jpg" alt="Forme d'onde circulaire minimaliste affichée dans un lecteur multimédia">
+                    <figcaption class="gallery-info">
+                        <h3>Onde circulaire dans un lecteur audio</h3>
+                        <p>Forme d'onde circulaire minimaliste intégrée dans un morceau et affichée comme pochette dans Celluloid.</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+        <section id="features">
+            <h2>Tout ce qu'il faut pour la visualisation audio et vos pochettes</h2>
+            <p class="section-subtitle">
+                Que vous conceviez la pochette d'un single ou organisiez des milliers de morceaux, Audio-SWARM automatise l'ensemble du flux de travail.
+            </p>
+
+            <div class="grid-2">
+                <article class="card">
+                    <h3>1. Générateur de formes d'onde</h3>
+                    <p>Transformez vos pistes audio en graphiques horizontaux ou verticaux ultra-nets avec un contrôle total sur les couleurs, dégradés, espacements et formes de crêtes.</p>
+                    <ul>
+                        <li><strong>Très haute résolution :</strong> Exportez des images jusqu'à 12 000 pixels de large pour écrans 4K et impressions grand format.</li>
+                        <li><strong>Flux vertical unique :</strong> Affichez les crêtes audio sous forme de tranches verticales fluides pour des créations modernes.</li>
+                        <li><strong>Mode lot récursif :</strong> Traitez des dossiers entiers et leurs sous-dossiers tout en conservant votre arborescence.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>2. Générateur de formes d'onde circulaires</h3>
+                    <p>Créez des visualisations audio circulaires et géométriques sur fond transparent, prêtes pour vos affiches, étiquettes vinyles ou incrustations vidéo.</p>
+                    <ul>
+                        <li><strong>Trois modes distincts :</strong> Forme d'onde circulaire, Spectre radial et Forme d'onde circulaire minimaliste.</li>
+                        <li><strong>Contrôle directionnel :</strong> Déployez les crêtes vers l'extérieur, l'intérieur ou les deux avec rayon interne et rotation réglables.</li>
+                        <li><strong>Aperçu en direct :</strong> Ajustez l'amplitude, la sensibilité et l'épaisseur du trait avant l'exportation en lot.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>3. Associeur de pochettes en lot</h3>
+                    <p>Fini l'édition des métadonnées morceau par morceau. Placez vos fichiers audio et vos images dans un dossier et intégrez les pochettes en quelques secondes.</p>
+                    <ul>
+                        <li><strong>Association automatique :</strong> Associe séquentiellement les images aux fichiers audio selon l'ordre des noms de fichiers.</li>
+                        <li><strong>Conversion intelligente :</strong> Redimensionne automatiquement les images et remplit les fonds transparents avec la couleur choisie.</li>
+                        <li><strong>Noms d'origine préservés :</strong> Met à jour les balises intégrées proprement sans renommer vos fichiers.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>4. Affiches vidéo (Expérimental)</h3>
+                    <p>Donnez une identité visuelle soignée à vos collections vidéo en intégrant des affiches personnalisées sur plusieurs fichiers en un seul traitement.</p>
+                    <ul>
+                        <li><strong>Intégration d'affiches par lot :</strong> Associe automatiquement vos images aux fichiers vidéo MP4, M4V et MKV.</li>
+                        <li><strong>Remplissage d'arrière-plan intelligent :</strong> Redimensionne les images et applique une couleur de fond lorsque la transparence n'est pas prise en charge.</li>
+                        <li><strong>Conservation des noms d'origine :</strong> Met à jour les fichiers vidéo directement sur place sans ajouter de suffixe indésirable.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>5. Interface multilingue &amp; aide intégrée</h3>
+                    <p>Conçu pour les créateurs du monde entier avec une documentation hors ligne intégrée qui s'adapte automatiquement à la langue choisie.</p>
+                    <ul>
+                        <li><strong>12 langues d'interface :</strong> Basculez entre français, anglais, allemand, espagnol, portugais, italien, néerlandais, ukrainien, japonais, coréen et chinois sans redémarrer.</li>
+                        <li><strong>Centre d'aide hors ligne :</strong> Consultez des guides illustrés et des explications détaillées directement dans l'application sans connexion Internet.</li>
+                        <li><strong>Documentation synchronisée :</strong> Les pages d'aide et exemples visuels se mettent à jour automatiquement lors du changement de langue.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h3>6. Flux de travail Glisser-Déposer</h3>
+                    <p>Évitez les explorateurs de fichiers fastidieux et passez directement à la création grâce à un espace de travail rapide et fluide.</p>
+                    <ul>
+                        <li><strong>Dépôt instantané de fichiers et dossiers :</strong> Glissez des pistes individuelles ou des dossiers musicaux complets directement dans chaque onglet.</li>
+                        <li><strong>Gestion complète des chemins :</strong> Prend en charge sans accroc les arborescences complexes et les noms de dossiers contenant des espaces.</li>
+                        <li><strong>Thème studio unifié :</strong> Boutons cohérents, aperçus en direct et sélecteurs de couleurs personnalisés sur tous les outils.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section id="prints">
+            <h2>Impressions grand format &amp; décoration intérieure</h2>
+            <p class="section-subtitle">
+                Avec une résolution d'exportation allant jusqu'à 12 000 pixels, Audio-SWARM transforme vos morceaux préférés, discours ou identités sonores en œuvres murales de qualité galerie.
+            </p>
+
+            <div class="gallery-grid">
+                <figure class="gallery-item">
+                    <img src="Spa-and-Fitness-Wellness-Studio-Waveform-Art.jpg" alt="Studio de bien-être, yoga et spa décoré d'une œuvre d'onde sonore apaisante">
+                    <figcaption class="gallery-info">
+                        <h3>Studios de fitness, salons de yoga &amp; spas</h3>
+                        <p>Associez des ondes sonores circulaires sereines à des dégradés apaisants pour apporter un rythme visuel calme aux espaces de détente.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="Luxury-Corridor-with-Vibrant-Audio-Art.jpg" alt="Onde sonore circulaire et grand tirage mural horizontal dans un espace professionnel moderne">
+                    <figcaption class="gallery-info">
+                        <h3>Bureaux modernes &amp; espaces de travail</h3>
+                        <p>Œuvres panoramiques imprimées en 12 000 px offrant une netteté remarquable pour habiller les murs de salles de réunion.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="Starry-Cosmic-Waveform-Frame-Living-Room.jpg" alt="Œuvre d'onde sonore circulaire encadrée dans un salon privé">
+                    <figcaption class="gallery-info">
+                        <h3>Hôtels-boutiques &amp; salons privés</h3>
+                        <p>Tirages circulaires sur mesure adaptés aux palettes de couleurs et à l'ambiance de chaque espace.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="example-luxury-hotel-with-audio-waveform.jpg" alt="Affiche encadrée de forme d'onde horizontale dans le hall d'un hôtel de luxe">
+                    <figcaption class="gallery-info">
+                        <h3>Halls d'hôtel &amp; espaces publics</h3>
+                        <p>Transformez une musique d'accueil signature ou une ambiance sonore locale en œuvre architecturale grand format sur mesure.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="Rainbow-Waveforms-in-a-Cozy-Cafe.jpg" alt="Formes d'onde arc-en-ciel encadrées dans un café et restaurant chaleureux">
+                    <figcaption class="gallery-info">
+                        <h3>Restaurants, cafés &amp; bars à cocktails</h3>
+                        <p>Transformez la playlist emblématique d'un établissement ou un morceau jazz favori en décoration murale acoustique unique.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="gallery-item">
+                    <img src="Cozy-Bedroom-with-Rainbow-Circular-Art-Waveform.jpg" alt="Chambre chaleureuse décorée d'une œuvre d'onde sonore circulaire au-dessus du lit">
+                    <figcaption class="gallery-info">
+                        <h3>Chambres modernes &amp; pièces à vivre</h3>
+                        <p>Immortalisez une chanson de mariage, un message vocal précieux ou un titre favori sous forme de décoration intérieure personnalisée.</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+        <section id="formats">
+            <h2>Formats audio, vidéo et image pris en charge</h2>
+            <p class="section-subtitle">
+                Audio-SWARM utilise FFmpeg et Mutagen en arrière-plan pour décoder avec précision les formats audio compressés et sans perte.
+            </p>
+
+            <div class="specs-box">
+                <div class="spec-item">
+                    <h4>Formats audio pris en charge</h4>
+                    <p>MP3, FLAC, WAV, AIFF / AIF, M4A / AAC, OGG / OGA et OPUS.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Formats d'image et d'exportation</h4>
+                    <p>Prend en charge les fichiers PNG (avec transparence alpha complète) et JPG / JPEG.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Conteneurs vidéo (Bêta)</h4>
+                    <p>Ajout d'affiches en lot pris en charge pour les fichiers MP4, M4V et MKV.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Options de sortie flexibles</h4>
+                    <p>Intégrez l'onde graphique dans le fichier audio, enregistrez-la à côté ou exportez des images autonomes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="install">
+            <h2>Guide d'installation rapide</h2>
+            <p class="section-subtitle">
+                Audio-SWARM fonctionne avec Python 3.12+ et nécessite FFmpeg installé sur votre système.
+            </p>
+
+            <div class="install-card">
+                <h3>1. Installer les bibliothèques Python requises</h3>
+                <p>Après avoir installé Python 3.12+ et FFmpeg, installez les quatre dépendances requises via votre terminal ou invite de commandes :</p>
+                <pre><code>pip install numpy matplotlib pillow mutagen</code></pre>
+
+                <h3>2. Télécharger et lancer</h3>
+                <p>Téléchargez et extrayez l'<a href="https://github.com">archive ZIP d'Audio-SWARM</a>, puis lancez l'application via le raccourci de votre système ou exécutez :</p>
+                <pre><code>python3 main.py</code></pre>
+                <p>Besoin d'instructions spécifiques pour Ubuntu/Linux Mint, Windows 10/11 ou macOS ? Consultez le <a href="https://github.com" target="_blank">guide complet d'installation sur GitHub</a>.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Audio-SWARM</strong> — Créé par Patrice Laborda • Sous licence GNU AGPLv3</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com" target="_blank">Dépôt GitHub</a> • 
+            <a href="https://github.com/issues" target="_blank">Signaler un bug</a>
+        </p>
+    </footer>
+
+    <!-- Fenêtre Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" title="Fermer">&times;</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="">
+            <p id="lightbox-caption" class="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        document.querySelectorAll('.gallery-item img, .screenshot-wrapper img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightboxCaption.textContent = img.alt;
+                lightbox.classList.add('active');
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
+
+
